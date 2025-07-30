@@ -13,7 +13,7 @@ interface WalletProps {
 export function Wallet({ onBack, userData }: WalletProps) {
   const [showWithdrawForm, setShowWithdrawForm] = useState(false)
   const [showSpecialOffer, setShowSpecialOffer] = useState(false)
-  const [withdrawAmount, setWithdrawAmount] = useState("")
+  const [withdrawAmount, setWithdrawAmount] = useState("150")
   const [pixKey, setPixKey] = useState("")
   const [countdown, setCountdown] = useState({ minutes: 4, seconds: 52 })
 

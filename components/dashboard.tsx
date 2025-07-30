@@ -23,13 +23,13 @@ export function Dashboard({ userData }: DashboardProps) {
       title: "As Sombras de Eldoria",
       author: "Marina Silvestre",
       price: "R$ 30,00",
-      status: "available",
+      status: "completed", // Mudado para completed após avaliação
     },
     {
       title: "Código Vermelho",
       author: "Alexandre Ferreira",
       price: "R$ 75,00",
-      status: "blocked",
+      status: "available", // Agora disponível
     },
     {
       title: "O Jardim das Memórias Perdidas",
@@ -41,6 +41,32 @@ export function Dashboard({ userData }: DashboardProps) {
 
   const handleReadBook = (book) => {
     setCurrentBook(book)
+  }
+
+  const getStatusButton = (book: any) => {
+    switch (book.status) {
+      case "available":
+        return (
+          <button
+            onClick={() => handleReadBook(book)}
+            className="w-full sm:w-auto bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] text-white px-6 py-3 rounded-xl font-bold hover:from-[#7C3AED] hover:to-[#9333EA] transition-all duration-200 shadow-lg"
+          >
+            Ler e Avaliar
+          </button>
+        )
+      default:
+        return (
+          <button className="w-full sm:w-auto bg-[#F1F5F9] text-[#94A3B8] px-6 py-3 rounded-xl font-bold cursor-not-allowed border border-[#E2E8F0]">
+            Bloqueado
+          </button>
+        )
+      case "completed":
+        return (
+          <button className="w-full sm:w-auto bg-green-500 text-white px-6 py-3 rounded-xl font-bold cursor-default">
+            ✅ Concluído
+          </button>
+        )
+    }
   }
 
   if (showWallet) {
@@ -110,7 +136,7 @@ export function Dashboard({ userData }: DashboardProps) {
             <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-xl border border-[#E2E8F0]">
               <div className="text-center">
                 <div className="text-sm text-[#64748B] mb-2 font-medium">Saldo Disponível</div>
-                <div className="text-3xl sm:text-4xl font-bold text-[#10B981] mb-6">R$ 0,00</div>
+                <div className="text-3xl sm:text-4xl font-bold text-[#10B981] mb-6">R$ 150,00</div>
                 <button
                   onClick={() => setShowWallet(true)}
                   className="w-[90%] mx-auto whitespace-nowrap bg-gradient-to-r from-[#10B981] to-[#059669] text-white py-3 sm:py-3 rounded-xl font-bold hover:from-[#059669] hover:to-[#047857] transition-all duration-200 shadow-lg"
@@ -123,7 +149,7 @@ export function Dashboard({ userData }: DashboardProps) {
             <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-xl border border-[#E2E8F0]">
               <div className="text-center">
                 <div className="text-sm text-[#64748B] mb-2 font-medium">Livros Hoje</div>
-                <div className="text-3xl sm:text-4xl font-bold text-[#3B82F6] mb-6">0</div>
+                <div className="text-3xl sm:text-4xl font-bold text-[#3B82F6] mb-6">1</div>
                 <div className="text-sm text-[#64748B]">Avaliações concluídas</div>
               </div>
             </div>
@@ -132,7 +158,7 @@ export function Dashboard({ userData }: DashboardProps) {
           {/* Welcome Message */}
           <div className="mb-6 sm:mb-8">
             <h1 className="text-2xl sm:text-3xl font-bold text-[#1E293B] mb-2">Olá, {userData.name}! 👋</h1>
-            <p className="text-[#64748B] text-base sm:text-lg">Você avaliou 0 livros hoje. Que tal começar agora?</p>
+            <p className="text-[#64748B] text-base sm:text-lg">Você avaliou 1 livro hoje. Que tal continuar?</p>
           </div>
 
           {/* Books Section */}
@@ -156,21 +182,11 @@ export function Dashboard({ userData }: DashboardProps) {
                         ⏳ Aguarde ser liberado para sua conta
                       </p>
                     )}
-                  </div>
-                  <div className="w-full sm:w-auto">
-                    {book.status === "available" ? (
-                      <button
-                        onClick={() => handleReadBook(book)}
-                        className="w-full sm:w-auto bg-gradient-to-r from-[#8B5CF6] to-[#A855F7] text-white px-6 py-3 rounded-xl font-bold hover:from-[#7C3AED] hover:to-[#9333EA] transition-all duration-200 shadow-lg"
-                      >
-                        Ler e Avaliar
-                      </button>
-                    ) : (
-                      <button className="w-full sm:w-auto bg-[#F1F5F9] text-[#94A3B8] px-6 py-3 rounded-xl font-bold cursor-not-allowed border border-[#E2E8F0]">
-                        Bloqueado
-                      </button>
+                    {book.status === "completed" && (
+                      <p className="text-xs sm:text-sm text-green-600 mt-2 font-medium">✅ Avaliação concluída</p>
                     )}
                   </div>
+                  <div className="w-full sm:w-auto">{getStatusButton(book)}</div>
                 </div>
               ))}
             </div>

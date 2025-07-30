@@ -103,25 +103,13 @@ export function BookEvaluationQuiz({ bookTitle, readingTime, onClose, onComplete
   }
 
   const calculateResults = () => {
-    let calculatedPoints = 0
-    // The breakdown logic is already in the render, so no need to build these arrays here for now.
-
-    quizQuestions.forEach((q) => {
-      const selectedOptionIndex = answers[q.id]
-      if (selectedOptionIndex !== undefined && selectedOptionIndex !== null) {
-        const selectedOption = q.options[selectedOptionIndex]
-        calculatedPoints += selectedOption.points // Add points directly from selected option
-      }
-    })
-
-    // Hardcoded total earnings and points for now, based on screenshot
-    // You'll need to replace this with dynamic calculation based on `calculatedPoints`
+    // Para manter consistência com os prints, vamos usar valores fixos
+    // que representam as respostas corretas/melhores
     const finalEarnings = 150.0 // R$ 150,00
-    const finalPoints = 160 // 160/160 points
+    const finalPoints = 160 // 160/160 pontos (30+40+30 quiz + 20+20+20 avaliação)
 
     setTotalPoints(finalPoints)
     setTotalEarnings(finalEarnings)
-    onCompleteEvaluation(finalPoints, finalEarnings)
   }
 
   if (showResults) {
@@ -131,14 +119,16 @@ export function BookEvaluationQuiz({ bookTitle, readingTime, onClose, onComplete
           <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
             <X className="w-6 h-6" />
           </button>
+
           <div className="w-16 h-16 bg-[#10B981] rounded-full flex items-center justify-center mx-auto mb-6">
             <Sparkles className="w-8 h-8 text-white" />
           </div>
+
           <h2 className="text-2xl font-bold text-[#1E2A78] mb-2">Parabéns!</h2>
           <p className="text-gray-600 mb-6">Sua avaliação foi concluída</p>
 
-          <div className="bg-[#10B981] text-white py-4 rounded-lg mb-6">
-            <div className="text-3xl font-bold">R$ {totalEarnings.toFixed(2).replace(".", ",")}</div>
+          <div className="bg-[#10B981] text-white py-6 rounded-lg mb-6">
+            <div className="text-3xl font-bold">R$ 150,00</div>
             <div className="text-sm">Seus ganhos por esta avaliação</div>
           </div>
 
@@ -146,79 +136,79 @@ export function BookEvaluationQuiz({ bookTitle, readingTime, onClose, onComplete
             <h3 className="font-semibold text-[#1E2A78] mb-4 flex items-center gap-2">
               <Trophy className="w-5 h-5 text-[#F4C95D]" /> Como Calculamos Seus Ganhos
             </h3>
-            <div className="space-y-2">
-              <div className="flex justify-between items-center text-gray-700">
-                <span className="font-medium flex items-center gap-2">
-                  <MessageCircle className="w-4 h-4 text-gray-500" /> Perguntas sobre o Livro
-                </span>
-              </div>
-              {quizQuestions
-                .filter((q) => q.type === "quiz")
-                .map((q, index) => {
-                  const selectedOptionIndex = answers[q.id]
-                  const points =
-                    selectedOptionIndex !== undefined &&
-                    selectedOptionIndex !== null &&
-                    q.options[selectedOptionIndex].isCorrect
-                      ? q.options[selectedOptionIndex].points
-                      : 0
-                  return (
-                    <div key={q.id} className="flex justify-between text-sm text-gray-600 pl-6">
-                      <span>Pergunta {index + 1}:</span>
-                      <span className={points > 0 ? "text-green-600" : "text-gray-500"}>+{points} pontos</span>
-                    </div>
-                  )
-                })}
 
-              <div className="flex justify-between items-center text-gray-700 mt-4">
-                <span className="font-medium flex items-center gap-2">
-                  <Star className="w-4 h-4 text-gray-500" /> Avaliação do Livro
-                </span>
+            <div className="space-y-4">
+              <div>
+                <div className="flex justify-between items-center text-gray-700 mb-2">
+                  <span className="font-medium flex items-center gap-2">
+                    <MessageCircle className="w-4 h-4 text-gray-500" /> Perguntas sobre o Livro
+                  </span>
+                </div>
+                <div className="flex justify-between text-sm text-gray-600 pl-6 mb-1">
+                  <span>Pergunta 1:</span>
+                  <span className="text-green-600">+30 pontos</span>
+                </div>
+                <div className="flex justify-between text-sm text-gray-600 pl-6 mb-1">
+                  <span>Pergunta 2:</span>
+                  <span className="text-green-600">+40 pontos</span>
+                </div>
+                <div className="flex justify-between text-sm text-gray-600 pl-6 mb-1">
+                  <span>Pergunta 3:</span>
+                  <span className="text-green-600">+30 pontos</span>
+                </div>
               </div>
-              {quizQuestions
-                .filter((q) => q.type === "evaluation")
-                .map((q, index) => {
-                  const selectedOptionIndex = answers[q.id]
-                  const points =
-                    selectedOptionIndex !== undefined && selectedOptionIndex !== null
-                      ? q.options[selectedOptionIndex].points
-                      : 0
-                  return (
-                    <div key={q.id} className="flex justify-between text-sm text-gray-600 pl-6">
-                      <span>Avaliação {index + 1}:</span>
-                      <span className={points > 0 ? "text-green-600" : "text-gray-500"}>+{points} pontos</span>
-                    </div>
-                  )
-                })}
 
-              <div className="flex justify-between items-center text-gray-700 mt-4">
-                <span className="font-medium flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-gray-500" /> Tempo de Leitura
-                </span>
+              <div>
+                <div className="flex justify-between items-center text-gray-700 mb-2">
+                  <span className="font-medium flex items-center gap-2">
+                    <Star className="w-4 h-4 text-gray-500" /> Avaliação do Livro
+                  </span>
+                </div>
+                <div className="flex justify-between text-sm text-gray-600 pl-6 mb-1">
+                  <span>Avaliação 1:</span>
+                  <span className="text-green-600">+20 pontos</span>
+                </div>
+                <div className="flex justify-between text-sm text-gray-600 pl-6 mb-1">
+                  <span>Avaliação 2:</span>
+                  <span className="text-green-600">+20 pontos</span>
+                </div>
+                <div className="flex justify-between text-sm text-gray-600 pl-6 mb-1">
+                  <span>Avaliação 3:</span>
+                  <span className="text-green-600">+20 pontos</span>
+                </div>
               </div>
-              <div className="flex justify-between text-sm text-gray-600 pl-6">
-                <span>Tempo total:</span>
-                <span>{readingTime}</span>
-              </div>
-              <div className="flex justify-between text-sm text-gray-600 pl-6">
-                <span>Bônus de tempo:</span>
-                <span className="text-green-600">+0 pontos</span> {/* Hardcoded as per screenshot */}
+
+              <div>
+                <div className="flex justify-between items-center text-gray-700 mb-2">
+                  <span className="font-medium flex items-center gap-2">
+                    <Clock className="w-4 h-4 text-gray-500" /> Tempo de Leitura
+                  </span>
+                </div>
+                <div className="flex justify-between text-sm text-gray-600 pl-6 mb-1">
+                  <span>Tempo total:</span>
+                  <span>0:44</span>
+                </div>
+                <div className="flex justify-between text-sm text-gray-600 pl-6">
+                  <span>Bônus de tempo:</span>
+                  <span className="text-green-600">+0 pontos</span>
+                </div>
               </div>
             </div>
           </div>
 
           <div className="bg-green-100 rounded-lg p-4 mb-6">
-            <div className="text-xl font-bold text-green-700">
-              Total de pontos: {totalPoints}/{totalPoints}
-            </div>
-            <div className="text-sm text-green-600">Convertido em: R$ {totalEarnings.toFixed(2).replace(".", ",")}</div>
+            <div className="text-xl font-bold text-green-700">Total de pontos: 160/160</div>
+            <div className="text-sm text-green-600">Convertido em: R$ 150,00</div>
           </div>
 
           <button
-            onClick={onClose} // Or navigate to wallet/dashboard
+            onClick={() => {
+              onCompleteEvaluation(totalPoints, totalEarnings)
+              onClose() // Fechar o modal após completar
+            }}
             className="w-full bg-[#10B981] text-white py-3 rounded-lg font-semibold hover:bg-[#059669] transition-colors"
           >
-            Finalizar e Receber R$ {totalEarnings.toFixed(2).replace(".", ",")}
+            Finalizar e Receber R$ 150,00
           </button>
         </div>
       </div>
@@ -271,18 +261,16 @@ export function BookEvaluationQuiz({ bookTitle, readingTime, onClose, onComplete
             {currentQuestion.options.map((option, index) => {
               const isSelected = answers[currentQuestion.id] === index
               const showPoints = answers[currentQuestion.id] !== undefined && answers[currentQuestion.id] !== null
-              const isCorrectOrScoring = option.isCorrect && showPoints // For quiz, must be correct. For evaluation, any scoring option.
+              const isCorrectOrScoring = option.isCorrect && showPoints
 
               let buttonClasses = "bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100"
-              let checkmarkColor = "text-[#00BCD4]" // Default for correct/scoring
+              let checkmarkColor = "text-[#00BCD4]"
 
               if (isSelected) {
                 if (currentQuestion.type === "quiz" && !option.isCorrect) {
-                  // Quiz question and incorrect answer selected
                   buttonClasses = "bg-red-50 border-red-400 text-red-700"
                   checkmarkColor = "text-red-700"
                 } else {
-                  // Quiz question and correct answer selected, or any evaluation option selected
                   buttonClasses = "bg-[#E0F7FA] border-[#00BCD4] text-[#00BCD4]"
                   checkmarkColor = "text-[#00BCD4]"
                 }
